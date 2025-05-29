@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f2f2f2;
+    }
+    h2 {
+      color: #333;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px;
+    }
+    .book {
+      background: #fff;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border-left: 4px solid #4CAF50;
+      display: flex;
+      justify-content: space-between;
+    }
+    .book span {
+      font-weight: bold;
+    }
+    .book button {
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>📚 Book Manager (Simulated API)</h2>
+  <input id="title" placeholder="Title" />
+  <input id="author" placeholder="Author" />
+  <button onclick="addBook()">Add Book</button>
+
+  <div id="book-list"></div>
+
+  <script>
+    let books = JSON.parse(localStorage.getItem('books') || '[]');
+
+    function saveBooks() {
+      localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    function renderBooks() {
+      const list = document.getElementById('book-list');
+      list.innerHTML = '';
+      books.forEach((book, index) => {
+        list.innerHTML += `
+          <div class="book">
+            <div><span>${book.title}</span> by ${book.author}</div>
+            <button onclick="deleteBook(${index})">Delete</button>
+          </div>`;
+      });
+    }
+
+    function addBook() {
+      const title = document.getElementById('title').value.trim();
+      const author = document.getElementById('author').value.trim();
+      if (!title || !author) return alert("Both fields are required!");
+      books.push({ title, author });
+      saveBooks();
+      renderBooks();
+      document.getElementById('title').value = '';
+      document.getElementById('author').value = '';
+    }
+
+    function deleteBook(index) {
+      books.splice(index, 1);
+      saveBooks();
+      renderBooks();
+    }
+
+    renderBooks();
+  </script>
+</body>
+</html>
+
